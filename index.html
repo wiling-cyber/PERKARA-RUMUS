@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matematik bersama Cikgu Wi - Master Perkara Rumus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 40%, #fae8ff 100%);
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --primary-blue: #0284c7;
+      --pink-accent: #ec4899;
+      --purple-accent: #9333ea;
+      --yellow-accent: #f59e0b;
+      --green-accent: #10b981;
+      --text-dark: #0f172a;
+      --text-muted: #475569;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+      padding: 15px;
+    }
+
+    /* Floating Math Classroom Canvas */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 820px;
+      z-index: 10;
+      position: relative;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 3px solid #ffffff;
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 15px 35px rgba(14, 165, 233, 0.15), 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    /* Header & Branding Elements */
+    .branding-banner {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .badge-top {
+      display: inline-block;
+      background: linear-gradient(135deg, #ec4899, #d946ef);
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      padding: 6px 18px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+      margin-bottom: 8px;
+    }
+
+    h1.main-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      text-shadow: 2px 2px 0px #bae6fd;
+      line-height: 1.2;
+    }
+
+    h1.main-title span {
+      color: var(--pink-accent);
+      text-shadow: 2px 2px 0px #fbcfe8;
+    }
+
+    .slogan-pill {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+
+    .pill-item {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      color: #166534;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .quote-box {
+      background: #fffbebf5;
+      border: 2px dashed #fcd34d;
+      border-radius: 16px;
+      padding: 12px 18px;
+      text-align: center;
+      color: #92400e;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 25px;
+    }
+
+    /* Input Form Styles */
+    .input-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 800;
+      color: var(--primary-blue);
+      font-size: 1.05rem;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text-dark);
+      font-size: 1.05rem;
+      font-family: inherit;
+      font-weight: 600;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .input-group input:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+    }
+
+    .btn-action {
+      font-family: 'Fredoka', sans-serif;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(2, 132, 199, 0.45);
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+    }
+
+    /* Quiz Stats Bar */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      padding: 12px 20px;
+      border-radius: 18px;
+    }
+
+    .stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    /* Question Display Card */
+    .question-box {
+      text-align: center;
+      margin-bottom: 25px;
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      padding: 22px;
+      border-radius: 22px;
+      border: 2px solid #bae6fd;
+    }
+
+    .question-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 12px;
+    }
+
+    /* Mathematical Renderer */
+    .math-expr {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.85rem;
+      color: var(--text-dark);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      line-height: 1.4;
+    }
+
+    /* Fraction Formatting */
+    .frac {
+      display: inline-flex;
+      flex-direction: column;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0 4px;
+    }
+
+    .frac .num {
+      border-bottom: 2.5px solid currentColor;
+      padding-bottom: 2px;
+      display: block;
+    }
+
+    .frac .den {
+      padding-top: 2px;
+      display: block;
+    }
+
+    /* Radical (Square Root) Formatting */
+    .radical {
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+    }
+
+    .rad-sym {
+      font-size: 2rem;
+      line-height: 1;
+      margin-right: -1px;
+    }
+
+    .rad-content {
+      border-top: 2.5px solid currentColor;
+      padding-top: 2px;
+      padding-left: 3px;
+      padding-right: 5px;
+      display: inline-flex;
+      align-items: center;
+      border-top-left-radius: 2px;
+    }
+
+    /* Options Grid - Colorful Bar Buttons */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    @media (min-width: 600px) {
+      .options-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .option-btn {
+      font-family: 'Fredoka', sans-serif;
+      padding: 16px 20px;
+      border-radius: 18px;
+      border: 2px solid transparent;
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .option-btn .opt-label {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+
+    .option-btn .opt-math {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Colorful Options Theme */
+    .opt-0 { background: linear-gradient(135deg, #0284c7, #0284c7); border-color: #38bdf8; }
+    .opt-1 { background: linear-gradient(135deg, #d946ef, #c026d3); border-color: #f0abfc; }
+    .opt-2 { background: linear-gradient(135deg, #10b981, #059669); border-color: #6ee7b7; }
+    .opt-3 { background: linear-gradient(135deg, #f59e0b, #d97706); border-color: #fde047; }
+
+    .option-btn:hover {
+      transform: translateY(-2px) scale(1.01);
+      filter: brightness(1.08);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    .option-btn.correct {
+      background: linear-gradient(135deg, #16a34a, #15803d) !important;
+      border-color: #4ade80 !important;
+      animation: pulse 0.4s ease-in-out;
+    }
+
+    .option-btn.wrong {
+      background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+      border-color: #fca5a5 !important;
+      opacity: 0.75;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    /* Solution Box */
+    .solution-card {
+      background: #f8fafc;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 15px;
+      border: 2px solid #cbd5e1;
+      border-left: 6px solid var(--primary-blue);
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .solution-card h4 {
+      color: var(--primary-blue);
+      margin-bottom: 8px;
+      font-size: 1.15rem;
+    }
+
+    .solution-steps {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    /* Sound Toggle Button */
+    .sound-toggle {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-blue);
+      cursor: pointer;
+      font-size: 1.25rem;
+      z-index: 100;
+      transition: 0.2s;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    .sound-toggle:hover {
+      background: #f1f5f9;
+      transform: scale(1.05);
+    }
+
+    /* Result Stats Screen */
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 22px 0;
+    }
+
+    .stat-card {
+      background: #f0f9ff;
+      padding: 16px;
+      border-radius: 18px;
+      text-align: center;
+      border: 2px solid #bae6fd;
+    }
+
+    .stat-card .val {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.9rem;
+      color: var(--primary-blue);
+    }
+
+    .stat-card .lbl {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .status-alert {
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .status-alert.success {
+      background: #dcfce7;
+      border: 2px solid #86efac;
+      color: #166534;
+    }
+
+    .status-alert.error {
+      background: #fee2e2;
+      border: 2px solid #fca5a5;
+      color: #991b1b;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Math Classroom Background Canvas -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Sound Toggle Button -->
+  <button class="sound-toggle" id="soundBtn" onclick="toggleSound()" title="Togol Bunyi">🔊</button>
+
+  <div class="app-container">
+
+    <!-- SCREEN 1: START / REGISTRATION -->
+    <div id="startScreen" class="card">
+      <div class="branding-banner">
+        <span class="badge-badge badge-top">Matematik bersama Cikgu Wi</span>
+        <h1 class="main-title">Master <span>Perkara Rumus</span></h1>
+        
+        <div class="slogan-pill">
+          <span class="pill-item">✓ Faham Konsep</span>
+          <span class="pill-item">✓ Kuasai Kemahiran</span>
+          <span class="pill-item">✓ Capai Kejayaan</span>
+        </div>
+
+        <div class="quote-box">
+          💡 "Matematik Bukan Sekadar Nombor, Tetapi Cara Berfikir!"
+        </div>
+      </div>
+
+      <form id="startForm" onsubmit="startGame(event)">
+        <div class="input-group">
+          <label for="studentName">Nama Murid</label>
+          <input type="text" id="studentName" placeholder="Masukkan nama penuh anda" required>
+        </div>
+
+        <div class="input-group">
+          <label for="studentClass">Kelas</label>
+          <input type="text" id="studentClass" placeholder="Contoh: 3 Cemerlang" required>
+        </div>
+
+        <button type="submit" class="btn-action" style="margin-top: 10px;">
+          🚀 MULA CABARAN
+        </button>
+      </form>
+    </div>
+
+    <!-- SCREEN 2: GAMEPLAY -->
+    <div id="gameScreen" class="card hidden">
+      <div class="branding-banner" style="margin-bottom: 15px;">
+        <span class="badge-top" style="font-size: 0.8rem; padding: 4px 14px;">Matematik bersama Cikgu Wi</span>
+      </div>
+
+      <div class="quiz-header">
+        <div class="stat-badge" style="color: #0284c7;">📌 Soalan <span id="qCurrent">1</span>/15</div>
+        <div class="stat-badge" style="color: #d97706;">🔥 Streak: <span id="streakCount">0</span></div>
+        <div class="stat-badge" style="color: #059669;">⭐ Skor: <span id="scoreCount">0</span></div>
+      </div>
+
+      <div class="question-box">
+        <div class="question-title" id="qInstruction">Ungkapkan x sebagai perkara rumus bagi:</div>
+        <div id="qFormula" class="math-expr"></div>
+      </div>
+
+      <div class="options-grid" id="optionsContainer"></div>
+
+      <!-- Solution Explanation Card -->
+      <div id="solutionCard" class="solution-card">
+        <h4>💡 Langkah Penyelesaian Cikgu Wi:</h4>
+        <div id="solutionContent" class="solution-steps"></div>
+        <button class="btn-action" onclick="nextQuestion()" style="margin-top: 15px; padding: 12px; font-size: 1.1rem;">
+          Soalan Seterusnya ➔
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: RESULTS -->
+    <div id="resultScreen" class="card hidden">
+      <div class="branding-banner">
+        <span class="badge-top">Matematik bersama Cikgu Wi</span>
+        <h1 class="main-title" style="font-size: 2.2rem;">Keputusan <span>Cabaran!</span></h1>
+        <p style="font-weight: 700; color: var(--text-muted); margin-top: 5px;" id="resultStudentInfo">Murid: - | Kelas: -</p>
+      </div>
+
+      <div class="result-stats">
+        <div class="stat-card">
+          <div class="val" id="resScore">0</div>
+          <div class="lbl">Markah</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="resAccuracy">0%</div>
+          <div class="lbl">Ketepatan</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="resTime">0s</div>
+          <div class="lbl">Jumlah Masa</div>
+        </div>
+      </div>
+
+      <div id="badgeContainer" style="text-align: center; margin-bottom: 20px;">
+        <div id="badgeTitle" style="font-family: 'Fredoka', sans-serif; font-size: 1.5rem; font-weight: 700; color: #d97706;">🏆 Legenda Perkara Rumus</div>
+      </div>
+
+      <div id="sheetStatus" class="status-alert"></div>
+
+      <button class="btn-action" onclick="resetToStart()">
+        🔄 Main Semula
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    // Embedded Google Apps Script Web App URL
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQbRFZpQ4SBJJWQTm6C8niwEzJFsYbPT4zwJnCIKpKAO5DVCX-5rHcnBvboa1m2dN6/exec";
+
+    /* ===================================================
+       1. ANIMATED CLASSROOM MATH CANVAS
+       =================================================== */
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const symbols = ['√', 'x²', '÷', '+', '-', '=', 'π', 'y', 'z', 'a/b', 'Cikgu Wi'];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class MathParticle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 18 + 14;
+        this.text = symbols[Math.floor(Math.random() * symbols.length)];
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.alpha = Math.random() * 0.2 + 0.08;
+        this.rotation = Math.random() * Math.PI * 2;
+        this.vRot = (Math.random() - 0.5) * 0.015;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotation += this.vRot;
+        if (this.x < -50 || this.x > canvas.width + 50 || this.y < -50 || this.y > canvas.height + 50) this.reset();
+      }
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.fillStyle = `rgba(2, 132, 199, ${this.alpha})`;
+        ctx.font = `${this.size}px Fredoka, sans-serif`;
+        ctx.fillText(this.text, 0, 0);
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < 35; i++) particles.push(new MathParticle());
+    function animateBg() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateBg);
+    }
+    animateBg();
+
+    /* ===================================================
+       2. AUDIO SYNTHESIZER (Web Audio API)
+       =================================================== */
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+    }
+
+    function playCheerSound() {
+      if (!soundEnabled) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, now + idx * 0.08);
+        gain.gain.linearRampToValueAtTime(0.2, now + idx * 0.08 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.4);
+      });
+
+      for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+          if (!soundEnabled) return;
+          const bufferSize = audioCtx.sampleRate * 0.05;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let j = 0; j < bufferSize; j++) data[j] = Math.random() * 2 - 1;
+
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.value = 1000 + Math.random() * 1200;
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          noise.start();
+        }, i * 60 + Math.random() * 30);
+      }
+    }
+
+    function playSirenSound() {
+      if (!soundEnabled) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(450, now);
+      osc.frequency.linearRampToValueAtTime(180, now + 0.25);
+      osc.frequency.linearRampToValueAtTime(400, now + 0.45);
+      osc.frequency.linearRampToValueAtTime(150, now + 0.7);
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.75);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.75);
+    }
+
+    /* ===================================================
+       3. 15 FORM 2/3 MATHEMATICS QUESTION BANK
+       =================================================== */
+    const questionsBank = [
+      {
+        target: 'x',
+        formula: 'y = x + 7',
+        options: [
+          'y - 7',
+          'y + 7',
+          '<div class="frac"><span class="num">y</span><span class="den">7</span></div>',
+          '7 - y'
+        ],
+        correct: 0,
+        solution: 'Pindahkan +7 ke sebelah kiri menjadi -7:<br>y - 7 = x  ➔  <b>x = y - 7</b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = 4x',
+        options: [
+          'y - 4',
+          '4y',
+          '<div class="frac"><span class="num">y</span><span class="den">4</span></div>',
+          '<div class="frac"><span class="num">4</span><span class="den">y</span></div>'
+        ],
+        correct: 2,
+        solution: 'Bahagikan kedua-dua belah dengan 4:<br><b>x = <div class="frac"><span class="num">y</span><span class="den">4</span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = 3x - 5',
+        options: [
+          '<div class="frac"><span class="num">y + 5</span><span class="den">3</span></div>',
+          '<div class="frac"><span class="num">y - 5</span><span class="den">3</span></div>',
+          '3y + 5',
+          '<div class="frac"><span class="num">3</span><span class="den">y + 5</span></div>'
+        ],
+        correct: 0,
+        solution: '1) Pindahkan -5: y + 5 = 3x<br>2) Bahagikan dengan 3: <b>x = <div class="frac"><span class="num">y + 5</span><span class="den">3</span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = <div class="frac"><span class="num">x</span><span class="den">5</span></div> + 2',
+        options: [
+          '5y - 2',
+          '5(y - 2)',
+          '5y + 10',
+          '<div class="frac"><span class="num">y - 2</span><span class="den">5</span></div>'
+        ],
+        correct: 1,
+        solution: '1) Pindahkan +2: y - 2 = <div class="frac"><span class="num">x</span><span class="den">5</span></div><br>2) Darabkan dengan 5: <b>x = 5(y - 2)</b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = x²',
+        options: [
+          'y²',
+          '<div class="radical"><span class="rad-sym">√</span><span class="rad-content">y</span></div>',
+          '2y',
+          '<div class="frac"><span class="num">y</span><span class="den">2</span></div>'
+        ],
+        correct: 1,
+        solution: 'Punca kuasaduakan kedua-dua belah:<br><b>x = <div class="radical"><span class="rad-sym">√</span><span class="rad-content">y</span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = <div class="radical"><span class="rad-sym">√</span><span class="rad-content">x</span></div>',
+        options: [
+          'y²',
+          '<div class="radical"><span class="rad-sym">√</span><span class="rad-content">y</span></div>',
+          '2y',
+          '<div class="frac"><span class="num">y</span><span class="den">2</span></div>'
+        ],
+        correct: 0,
+        solution: 'Kuasaduakan kedua-dua belah:<br><b>x = y²</b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = x² - 9',
+        options: [
+          '<div class="radical"><span class="rad-sym">√</span><span class="rad-content">y - 9</span></div>',
+          '<div class="radical"><span class="rad-sym">√</span><span class="rad-content">y + 9</span></div>',
+          '(y + 9)²',
+          'y² + 9'
+        ],
+        correct: 1,
+        solution: '1) Pindahkan -9: y + 9 = x²<br>2) Punca kuasa dua: <b>x = <div class="radical"><span class="rad-sym">√</span><span class="rad-content">y + 9</span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = <div class="radical"><span class="rad-sym">√</span><span class="rad-content">x + 4</span></div>',
+        options: [
+          'y² - 4',
+          'y² + 4',
+          '(y - 4)²',
+          '<div class="radical"><span class="rad-sym">√</span><span class="rad-content">y - 4</span></div>'
+        ],
+        correct: 0,
+        solution: '1) Kuasaduakan: y² = x + 4<br>2) Pindahkan +4: <b>x = y² - 4</b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = 2x² + 3',
+        options: [
+          '<div class="radical"><span class="rad-sym">√</span><span class="rad-content"><div class="frac"><span class="num">y - 3</span><span class="den">2</span></div></span></div>',
+          '<div class="frac"><span class="num"><div class="radical"><span class="rad-sym">√</span><span class="rad-content">y - 3</span></div></span><span class="den">2</span></div>',
+          '<div class="radical"><span class="rad-sym">√</span><span class="rad-content">y - 6</span></div>',
+          '<div class="frac"><span class="num">y² - 3</span><span class="den">2</span></div>'
+        ],
+        correct: 0,
+        solution: '1) y - 3 = 2x²<br>2) x² = <div class="frac"><span class="num">y - 3</span><span class="den">2</span></div><br>3) <b>x = <div class="radical"><span class="rad-sym">√</span><span class="rad-content"><div class="frac"><span class="num">y - 3</span><span class="den">2</span></div></span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = <div class="frac"><span class="num">3</span><span class="den">x</span></div>',
+        options: [
+          '3y',
+          '<div class="frac"><span class="num">3</span><span class="den">y</span></div>',
+          '<div class="frac"><span class="num">y</span><span class="den">3</span></div>',
+          'y - 3'
+        ],
+        correct: 1,
+        solution: '1) Darab x: xy = 3<br>2) Bahagi y: <b>x = <div class="frac"><span class="num">3</span><span class="den">y</span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = <div class="frac"><span class="num">x + 1</span><span class="den">x</span></div>',
+        options: [
+          '<div class="frac"><span class="num">1</span><span class="den">y - 1</span></div>',
+          '<div class="frac"><span class="num">1</span><span class="den">1 - y</span></div>',
+          'y - 1',
+          '<div class="frac"><span class="num">y + 1</span><span class="den">y</span></div>'
+        ],
+        correct: 0,
+        solution: '1) yx = x + 1<br>2) yx - x = 1 ➔ x(y - 1) = 1<br>3) <b>x = <div class="frac"><span class="num">1</span><span class="den">y - 1</span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = 5 - 2x',
+        options: [
+          '<div class="frac"><span class="num">5 - y</span><span class="den">2</span></div>',
+          '<div class="frac"><span class="num">y - 5</span><span class="den">2</span></div>',
+          '2y - 5',
+          '<div class="frac"><span class="num">5 + y</span><span class="den">2</span></div>'
+        ],
+        correct: 0,
+        solution: '1) Pindahkan -2x ke kiri: 2x + y = 5<br>2) 2x = 5 - y<br>3) <b>x = <div class="frac"><span class="num">5 - y</span><span class="den">2</span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = <div class="radical"><span class="rad-sym">√</span><span class="rad-content"><div class="frac"><span class="num">x</span><span class="den">3</span></div></span></div>',
+        options: [
+          '3y²',
+          '9y²',
+          '(3y)²',
+          '<div class="frac"><span class="num">y²</span><span class="den">3</span></div>'
+        ],
+        correct: 0,
+        solution: '1) Kuasaduakan: y² = <div class="frac"><span class="num">x</span><span class="den">3</span></div><br>2) Darab 3: <b>x = 3y²</b>'
+      },
+      {
+        target: 'x',
+        formula: 'y = <div class="frac"><span class="num">2x - 3</span><span class="den">4</span></div>',
+        options: [
+          '<div class="frac"><span class="num">4y + 3</span><span class="den">2</span></div>',
+          '<div class="frac"><span class="num">4y - 3</span><span class="den">2</span></div>',
+          '4y + 6',
+          '<div class="frac"><span class="num">2y + 3</span><span class="den">4</span></div>'
+        ],
+        correct: 0,
+        solution: '1) 4y = 2x - 3<br>2) 4y + 3 = 2x<br>3) <b>x = <div class="frac"><span class="num">4y + 3</span><span class="den">2</span></div></b>'
+      },
+      {
+        target: 'x',
+        formula: 'Kira nilai x apabila y = 5 bagi rumus: y = 2x + 1',
+        options: [
+          '2',
+          '3',
+          '4',
+          '5'
+        ],
+        correct: 0,
+        solution: 'Gantikan y = 5:<br>5 = 2x + 1 ➔ 4 = 2x ➔ <b>x = 2</b>'
+      }
+    ];
+
+    /* ===================================================
+       4. GAMEPLAY CONTROLLER
+       =================================================== */
+    let currentQ = 0;
+    let score = 0;
+    let streak = 0;
+    let correctAnswers = 0;
+    let totalTimeSpent = 0;
+    let gameStartTime = 0;
+
+    let studentData = { nama: '', kelas: '' };
+
+    function startGame(e) {
+      e.preventDefault();
+      studentData.nama = document.getElementById('studentName').value.trim();
+      studentData.kelas = document.getElementById('studentClass').value.trim();
+
+      if (!studentData.nama || !studentData.kelas) return;
+
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+
+      currentQ = 0;
+      score = 0;
+      streak = 0;
+      correctAnswers = 0;
+      totalTimeSpent = 0;
+      gameStartTime = Date.now();
+
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      if (currentQ >= questionsBank.length) {
+        endGame();
+        return;
+      }
+
+      const q = questionsBank[currentQ];
+      document.getElementById('qCurrent').textContent = currentQ + 1;
+      document.getElementById('streakCount').textContent = streak;
+      document.getElementById('scoreCount').textContent = score;
+
+      document.getElementById('qInstruction').textContent = q.formula.includes('Kira') ? 'Hitungkan Nilai Pemboleh Ubah:' : `Ungkapkan '${q.target}' sebagai perkara rumus bagi:`;
+      document.getElementById('qFormula').innerHTML = `<span>${q.formula}</span>`;
+
+      const optionsDiv = document.getElementById('optionsContainer');
+      optionsDiv.innerHTML = '';
+      document.getElementById('solutionCard').style.display = 'none';
+
+      const labels = ['A', 'B', 'C', 'D'];
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `option-btn opt-${idx}`;
+        btn.onclick = () => checkAnswer(idx);
+        btn.innerHTML = `
+          <div class="opt-label">${labels[idx]}</div>
+          <div class="opt-math">${opt}</div>
+        `;
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedIdx) {
+      const q = questionsBank[currentQ];
+      const buttons = document.querySelectorAll('.option-btn');
+
+      buttons.forEach(btn => btn.style.pointerEvents = 'none');
+
+      if (selectedIdx === q.correct) {
+        playCheerSound();
+        if (selectedIdx >= 0) buttons[selectedIdx].classList.add('correct');
+        streak++;
+        correctAnswers++;
+        const streakBonus = streak * 20;
+        score += 100 + streakBonus;
+      } else {
+        playSirenSound();
+        if (selectedIdx >= 0) buttons[selectedIdx].classList.add('wrong');
+        buttons[q.correct].classList.add('correct');
+        streak = 0;
+      }
+
+      document.getElementById('scoreCount').textContent = score;
+      document.getElementById('streakCount').textContent = streak;
+
+      document.getElementById('solutionContent').innerHTML = q.solution;
+      document.getElementById('solutionCard').style.display = 'block';
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      loadQuestion();
+    }
+
+    function endGame() {
+      totalTimeSpent = Math.round((Date.now() - gameStartTime) / 1000);
+      const accuracy = Math.round((correctAnswers / questionsBank.length) * 100);
+
+      document.getElementById('gameScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
+
+      document.getElementById('resultStudentInfo').textContent = `Murid: ${studentData.nama} | Kelas: ${studentData.kelas}`;
+      document.getElementById('resScore').textContent = score;
+      document.getElementById('resAccuracy').textContent = `${accuracy}%`;
+      document.getElementById('resTime').textContent = `${totalTimeSpent}s`;
+
+      let badge = "🥇 Legenda Perkara Rumus (Cikgu Wi)";
+      if (accuracy < 50) badge = "🌱 Perlu Peningkatan";
+      else if (accuracy < 80) badge = "⭐ Pakar Perkara Rumus";
+      document.getElementById('badgeTitle').textContent = badge;
+
+      sendToGoogleSheet(accuracy);
+    }
+
+    function sendToGoogleSheet(accuracy) {
+      const statusDiv = document.getElementById('sheetStatus');
+      
+      statusDiv.className = 'status-alert';
+      statusDiv.style.display = 'block';
+      statusDiv.style.background = '#e0f2fe';
+      statusDiv.style.borderColor = '#38bdf8';
+      statusDiv.style.color = '#0369a1';
+      statusDiv.textContent = '⏳ Menghantar markah ke Google Sheet Cikgu Wi...';
+
+      const payload = {
+        nama: studentData.nama,
+        kelas: studentData.kelas,
+        markah: score,
+        peratus: `${accuracy}%`,
+        masa: `${totalTimeSpent}s`
+      };
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.className = 'status-alert success';
+        statusDiv.textContent = '✅ Markah berjaya disimpan terus ke Google Sheet Cikgu Wi!';
+      })
+      .catch(err => {
+        console.error(err);
+        statusDiv.className = 'status-alert error';
+        statusDiv.textContent = '❌ Ralat penghantaran data. Sila semak sambungan internet.';
+      });
+    }
+
+    function resetToStart() {
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('startScreen').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
